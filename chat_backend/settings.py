@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-t_vqh(k#%fe+z1p*&8k$jog&35uhoi-b5qzw4f(4il(q_d897*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
@@ -72,6 +72,7 @@ ROOT_URLCONF = 'chat_backend.urls'
 SESSION_COOKIE_DOMAIN = '192.168.1.66'
 SESSION_COOKIE_SAMESITE = None
 SESSION_COOKIE_SECURE = False
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -93,17 +94,37 @@ WSGI_APPLICATION = 'chat_backend.wsgi.application'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 ASGI_APPLICATION = "chat_backend.asgi.application"
 
-REDIS_HOST = os.environ.get("REDIS_HOST", "127.0.0.1")  # Default to localhost if not set
-REDIS_PORT = int(os.environ.get("REDIS_PORT", 6379))  # Default to 6379 if not set
+# REDIS_HOST = os.environ.get("REDIS_HOST", "127.0.0.1")  # Default to localhost if not set
+# REDIS_PORT = int(os.environ.get("REDIS_PORT", 6379))  # Default to 6379 if not set
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [(REDIS_HOST, REDIS_PORT)],
+#         },
+#     },
+# }
+
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],  # Redis running on localhost
+#         },
+#     },
+# }
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(REDIS_HOST, REDIS_PORT)],
-        },
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        #  "CONFIG": {
+        #     "hosts": [("127.0.0.1", 6379)],  # Redis running on localhost
+        # },
     },
 }
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 

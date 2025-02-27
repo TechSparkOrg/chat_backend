@@ -1,0 +1,63 @@
+# Ignore Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore Virtual Environment
+venv/
+env/
+*.venv
+
+# Ignore IDE/editor-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore Django Secrets
+.env
+*.env
+config/settings/local.py  # If using separate settings for local/dev/prod
+
+# Ignore Django Migrations Cache (Optional)
+**/migrations/__pycache__/
+**/migrations/*.pyc
+**/migrations/*.pyo
+**/migrations/*.pyd
+**/migrations/*.sqlite3  # In case you're using SQLite for local development
+
+# Ignore Database Files (if using SQLite)
+*.sqlite3
+db.sqlite3
+
+# Ignore Static & Media Files (Generated)
+staticfiles/
+media/
+static/
+node_modules/
+
+# Ignore Logs
+logs/
+*.log
+*.out
+*.err
+gunicorn-error.log
+gunicorn-access.log
+
+# Ignore Django Cache & Temporary Files
+*.log
+tmp/
+cache/
+*.pid
+
+# Ignore Docker files (if using Docker)
+.dockerignore
+docker-compose.override.yml
+*.tar
+
+# Ignore Redis dump file (if using Redis for WebSockets)
+dump.rdb
+
+# Ignore coverage reports
+.coverage
+htmlcov/
