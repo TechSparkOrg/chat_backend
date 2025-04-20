@@ -1,4 +1,5 @@
 # accounts/serializers.py
+from urllib import request
 from rest_framework import serializers
 from .models import CustomUser
 from django.db.models import Q
@@ -16,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
     chat_exists = serializers.SerializerMethodField()
     delivery_status = serializers.SerializerMethodField()
     online = serializers.SerializerMethodField()  # Optional; if your user model has online info
-
+    last_message_from = serializers.SerializerMethodField()
     class Meta:
         model = CustomUser
         fields = (
@@ -25,11 +26,13 @@ class UserSerializer(serializers.ModelSerializer):
             'phone_number',
             'email',
             'friend_status',
+
             'last_message',
             'unseen_count',
             'chat_exists',
             'delivery_status',
             'online',
+            'last_message_from'
         )
 
     def get_friend_status(self, obj):
@@ -38,6 +41,25 @@ class UserSerializer(serializers.ModelSerializer):
             if obj in request.user.contacts.all():
                 return "friend"
         return "unknown"
+    
+    def get_last_message_from(self, obj):
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            return None
+        logged_in_user = request.user
+        # Get the latest message between users
+        last_msg = Message.objects.filter(
+            Q(sender=logged_in_user, recipient=obj) | 
+            Q(sender=obj, recipient=logged_in_user)
+        ).order_by('-timestamp').first()
+        
+        if last_msg:
+            return {
+                'id': last_msg.sender.id,
+                'timestamp': last_msg.timestamp.isoformat(),
+                'status': last_msg.status
+            }
+        return None
 
     def get_last_message(self, obj):
         request = self.context.get('request')

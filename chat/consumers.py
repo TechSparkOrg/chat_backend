@@ -131,10 +131,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def serialize_message(self, message, action_type='message'):
-        """
-        Serializes a message instance into a dictionary, ensuring that related fields
-        are evaluated in a synchronous context.
-        """
+   
         return {
             'id': message.id,
             'from': str(message.sender.id),
